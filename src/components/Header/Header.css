@@ -52,15 +52,6 @@
   color: #FFF;
 }
 
-.content{
-  margin-left: 200px;
-  padding: 1px 16px;
-}
-
-div.content{
-  margin-left: 0;
-}
-
 @media screen and (max-width: 400px){
   .sidebar a{
     float: none;
@@ -94,6 +85,11 @@ div.content{
 
   .sidebar div img{
     display: block;
+  }
+
+  .content{
+    margin-left: 200px;
+    padding: 1px 16px;
   }
   
 }
