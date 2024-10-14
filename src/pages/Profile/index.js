@@ -20,7 +20,7 @@ export default function Profile(){
 
   const [avatarUrl, setAvatarUrl] = useState(user && user.avatarUrl)
   const [imageAvatar, setImageAvatar] = useState(null);
-  const [name, setName] = useState(user && user.userName)
+  const [name, setName] = useState(user && user.name)
   const [email, setEmail] = useState(user && user.userEmail)
 
 
@@ -53,12 +53,12 @@ export default function Profile(){
         const docRef = doc(db, "users", user.uid)
         await updateDoc(docRef, {
           avatarUrl: urlPhoto,
-          userName: name,
+          name: name,
         })
         .then(() => {
           let data ={
             ...user,
-            userName: name,
+            name: name,
             avatarUrl: urlPhoto,
           }
   
@@ -77,12 +77,12 @@ export default function Profile(){
       const docRef = doc(db, "users", user.uid)
 
       await updateDoc(docRef, {
-        userName: name,
+        name: name,
       })
       .then(() => {
         let data ={
           ...user,
-          userName: name,
+          name: name,
         }
 
         setUser(data);
