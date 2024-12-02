@@ -95,12 +95,10 @@ export default function Dashboar(){
   return(
     <div>
       <Header />
-      
       <div className="content">
         <Title name="Tickets">
           <FiMessageSquare size={25} />
         </Title>
-
         <>
           <Link to="/new" className="new">
             <FiPlus color="#FFF" size={25}/>
