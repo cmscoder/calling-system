@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { AuthContext } from '../../contexts/auth'
 import { FiHome, FiUser, FiSettings } from 'react-icons/fi'
-import './header.css'
+import './Header.css'
 
 
 export default function Header(){
