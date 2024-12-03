@@ -22,8 +22,10 @@ export default function Dashboar(){
 
 
   const [tickets, setTickets] = useState([])
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true)
   const [isEmpty, setIsEmpty] = useState(false)
+  const [lastDocs, setLastDocs] = useState()
+  const [loadingMore, setLoadingMore] = useState(false)
 
 
   useEffect(() => {
@@ -65,13 +67,24 @@ export default function Dashboar(){
         })
       })
 
-      setTickets(tickets => [...tickets, ...list])
+      const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1]; // Taking the last item rendered
 
+      setTickets(tickets => [...tickets, ...list])
+      setLastDocs(lastDoc);
 
     }else{
       setIsEmpty(true);
     }
+
+    setLoadingMore(false);
     
+  }
+
+  async function handleMore(){
+    setLoadingMore(true);
+    const q = query(listRef, orderBy('created', 'desc'), startAfter(lastDocs), limit(5))
+    const querySnapshot = await getDocs(q);
+    await updateState(querySnapshot);
   }
 
   if(loading){
@@ -121,7 +134,7 @@ export default function Dashboar(){
                     <td data-label="Client">{item.client}</td>
                     <td data-label="Topic">{item.topic}</td>
                     <td data-label="Status">
-                      <span className="badge" style={{backgroundColor: "#999"}}>
+                      <span className="badge" style={{backgroundColor: item.status === 'Open' ? '#5cb85c' : '#999'}}>
                       {item.status}
                       </span>
                     </td>
@@ -130,15 +143,19 @@ export default function Dashboar(){
                       <button className="action" style={{backgroundColor: "#3583f6"}}>
                         <FiSearch color="#FFF" size={17} />
                       </button>
-                      <button  className="action" style={{backgroundColor: "#f6a935"}} >
+                      <Link to={`/new/${item.id}`}  className="action" style={{backgroundColor: "#f6a935"}} >
                         <FiEdit2 color="#FFF" size={17}  />
-                      </button>
+                      </Link>
                     </td>
                   </tr>
                 )
               })}
             </tbody>
           </table>
+
+
+          {loadingMore && <h3>Fetching more tickets...</h3>}
+          {!loadingMore && !isEmpty && <button className="btn-more" onClick={handleMore}>Fetch more</button>}
         </>
       </div>
     </div>
