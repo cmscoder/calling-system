@@ -11,6 +11,7 @@ import { collection, getDocs, orderBy, limit, startAfter, query} from 'firebase/
 import { db } from '../../services/firebaseConnection'
 
 import { format } from 'date-fns'
+import Modal from '../../components/Modal'
 
 import './dashboard.css'
 
@@ -26,6 +27,9 @@ export default function Dashboar(){
   const [isEmpty, setIsEmpty] = useState(false)
   const [lastDocs, setLastDocs] = useState()
   const [loadingMore, setLoadingMore] = useState(false)
+
+  const [showPostModal, setShowPostModal] = useState(false)
+  const [detail, setDetail] = useState({})
 
 
   useEffect(() => {
@@ -87,6 +91,11 @@ export default function Dashboar(){
     await updateState(querySnapshot);
   }
 
+  function toggleModal(item){
+    setShowPostModal(!showPostModal);
+    setDetail(item);
+  }
+
   if(loading){
     return(
       <div>
@@ -140,7 +149,7 @@ export default function Dashboar(){
                     </td>
                     <td data-label="Registered">{item.createdFormat}</td>
                     <td data-label="#">
-                      <button className="action" style={{backgroundColor: "#3583f6"}}>
+                      <button className="action" style={{backgroundColor: "#3583f6"}} onClick={() => toggleModal(item)}>
                         <FiSearch color="#FFF" size={17} />
                       </button>
                       <Link to={`/new/${item.id}`}  className="action" style={{backgroundColor: "#f6a935"}} >
@@ -158,6 +167,13 @@ export default function Dashboar(){
           {!loadingMore && !isEmpty && <button className="btn-more" onClick={handleMore}>Fetch more</button>}
         </>
       </div>
+      {showPostModal && (
+        <Modal 
+          content={detail}
+          close={() => setShowPostModal(!showPostModal)}
+        />
+      )}
+      
     </div>
   )
 }
